@@ -1,0 +1,9 @@
+CC=gcc
+LD=gcc
+CFLAGS=--std=c99 --pedantic -Wall -Wextra -Wmissing-prototypes
+LDFLAGS=
+LATEX=pdflatex
+BINARY=main-hexa
+TAR=tar
+TARNAME=s193957.tar.gz
+RAPPORTSOURCE=rapport_s193957
