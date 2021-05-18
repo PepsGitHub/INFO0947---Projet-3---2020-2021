@@ -103,7 +103,15 @@
 
 \subsection{Cas de base}
 
+Si $n = 1$ :\\
+
+$hexa\_dec\_rec(hexa, n) = convert(hexa[n - 1])$\\
+
 \subsection{Cas récursif}
+
+Si $n > 0$ :\\
+
+$hexa\_dec\_rec(hexa, n) = hexa\_dec\_rec(hexa, n - 1)$\\
 
 \section{Spécification}\label{specification}
 %%%%%%%%%%%%%%%%%%%%%%%%%
@@ -112,12 +120,111 @@
 % hexa_dec_rec()
 %
 
+\begin{lstlisting}
+//PréConditions : hexa != NULL, n >= 0
+//PostConditions : hexa\_dec\_rec = decimal $\wedge$ hexa = hexa$_0$ $\wedge$ n = n$_0$
+unsigned int hexa_dec_rec(char *hexa, int n);
+\end{lstlisting}
+
 \section{Construction Récursive}\label{recur}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
 % Fournissez et discutez ici la construction formelle (avec les assertions
 % intermédiaires) de la fonction hexa_dec_rec()
 %
+
+\subsection{Programmation Défensive}
+On vérifie que la précondition est respectée en interdisant à hexa d'être NULL et n ne peut pas être strictement négatif
+
+\begin{lstlisting}
+unsigned int hexa_dec_rec(char *hexa, int n){
+    assert(hexa != (void*)0 && n >= 0);
+    // \{PréConditions $\equiv$ $hexa \neq$ NULL $\wedge (length(hexa) \geq 0 \implies n \geq 0$)\}
+}
+\end{lstlisting}
+
+\newpage
+
+\subsection{Cas de Base}
+On gère le cas de base où $n = 1$ après s'être assuré que les préconditions sont bien respectées.
+
+\begin{lstlisting}
+// \{PréConditions $\equiv$ $hexa \neq$ NULL $\wedge (length(hexa) \geq 0 \implies n \geq 0$)\}
+if(n == 1 && i == n){ // i == n permet de différencier le cas de base du cas récursif
+    // \{hexa $\neq$ NULL $\wedge$ n = 1 $\wedge$ i = n\}
+    if(convert(hexa[n - 1]) != (unsigned int) -1)
+    //Vérif de la valur de retour de convert()
+        return convert(hexa[n - 1]);
+        // \{hexa\_dec\_rec = convert(hexa[n - 1]) $\wedge$ hexa = hexa$_0$ $\wedge$ n = n$_0$\}
+        // \{$\implies$ PostCondition\}
+    else
+        return -1;//dans le cas où l'un des char n'existe pas en hexadécimal
+        // \{hexa\_dec\_rec = -1 $\wedge$ hexa = hexa$_0$ $\wedge$ n = n$_0$\}
+        // \{$\implies$ PostCondition\}
+}
+\end{lstlisting}
+
+\subsection{Cas Récursifs}
+Il y a un seul cas récursif, selon que n est strictement positif.
+\{PréConditions$_{REC}$\} et \{PostConditions$_{REC}$\} sont respectivement les PréConditions et les PostConditions de l'appel récursif.
+
+\begin{lstlisting}
+}else if(n > 0){
+    // \{hexa $\neq$ NULL $\wedge$ n > 0\}
+    if(convert(hexa[n - 1]) != (unsigned int) -1){
+    //Vérif de la valur de retour de convert()
+        // \{$\implies$ PréConditions$_{REC}$\}
+        intermediaire += convert(hexa[n - 1]) * puissance;
+        // \{hexa $\neq$ NULL $\wedge$ n > 0 $\wedge intermediaire = intermediaire + convert(hexa[n-1])$\}
+        puissance *= 16;
+        // \{hexa $\neq$ NULL $\wedge$ n > 0 $\wedge$ $intermediaire = intermediaire + convert(hexa[n-1])$
+        // $\wedge$ $puissance = puissance * 16$\}
+        i = 2;
+        // \{hexa $\neq$ NULL $\wedge$ n > 0 $\wedge$ $intermediaire = intermediaire + convert(hexa[n-1])$
+        // $\wedge$ $puissance = puissance * 16$ $\wedge$ $i = 2$\}
+        return hexa_dec_rec(hexa, n - 1);
+        // \{PostConditions$_{REC}$ $\equiv$ hexa\_dec\_rec = hexa\_dec\_rec $\wedge$ n = n - 1 $\wedge$ hexa = hexa$_0$ \}
+        // \{$\implies$ PostConditions\}
+    }else
+        return -1;//dans le cas où l'un des char n'existe pas en hexadécimal
+        // \{hexa\_dec\_rec = -1 $\wedge$ hexa = hexa$_0$ $\wedge$ n = n$_0$\}
+        // \{$\implies$ PostConditions\}
+}
+\end{lstlisting}
+
+\newpage
+
+\subsection{Code complet}
+
+\begin{lstlisting}
+unsigned int hexa_dec_rec(char *hexa, int n){
+    assert(hexa != (void*)0 && n >= 0);//préconditions
+    
+    static int puissance = 1, intermediaire = 0, i = 1;
+    int decimal;
+    
+    if(n == 1 && i == n){
+        if(convert(hexa[n - 1]) != (unsigned int) -1)
+            return convert(hexa[n - 1]);
+        else
+            return -1;//dans le cas où l'un des char n'existe pas en hexadécimal
+    }else if(n > 0){
+        if(convert(hexa[n - 1]) != (unsigned int) -1){
+            intermediaire += convert(hexa[n - 1]) * puissance;
+            puissance *= 16;
+            i = 2;
+            return hexa_dec_rec(hexa, n - 1);//récursivité
+        }else
+            return -1;//dans le cas où l'un des char n'existe pas en hexadécimal
+    }
+    
+    decimal = intermediaire;
+    puissance = 1;
+    intermediaire = 0;
+    
+    return decimal;//retourne la valeur décimale finale
+}
+\end{lstlisting}
 
 \section{Traces d'Exécution}\label{traces}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%

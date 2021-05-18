@@ -35,34 +35,27 @@ static unsigned int convert(char hex){
 unsigned int hexa_dec_rec(char *hexa, int n){
   assert(hexa != (void*)0 && n >= 0);//préconditions
 
-  static int puissance = 1, resultat = 0, i = 0;
-  int final;
+  static int puissance = 1, intermediaire = 0, i = 1;
+  int decimal;
 
-  if(i == 0){
-    if(convert(hexa[n - 1]) != -1)
-      resultat = convert(hexa[n - 1]);
+  if(n == 1 && i == n){
+    if(convert(hexa[n - 1]) != (unsigned int) -1)
+      return convert(hexa[n - 1]);
     else
       return -1;//dans le cas où l'un des char n'existe pas en hexadécimal
-
-    i++;
-
-    return hexa_dec_rec(hexa, n - 1);//cas de base + appel récursif
-  }
-
-  if(n > 0){
-    puissance *= 16;
-    if(convert(hexa[n - 1]) != -1)
-      resultat += convert(hexa[n - 1]) * puissance;
-    else
+  }else if(n > 0){
+    if(convert(hexa[n - 1]) != (unsigned int) -1){
+      intermediaire += convert(hexa[n - 1]) * puissance;
+      puissance *= 16;
+      i = 2;
+      return hexa_dec_rec(hexa, n - 1);//récursivité
+    }else
       return -1;//dans le cas où l'un des char n'existe pas en hexadécimal
-
-    return hexa_dec_rec(hexa, n - 1);//récursivité
-  }else{
-    final = resultat;
-    i = 0;//réinit des var statiques
-    puissance = 1;
-    resultat = 0;
-
-    return final;//retourne la valeur finale
   }
+
+  decimal = intermediaire;
+  puissance = 1;
+  intermediaire = 0;
+
+  return decimal;//retourne la valeur décimale finale
 }//fin hexa_dec_rec()

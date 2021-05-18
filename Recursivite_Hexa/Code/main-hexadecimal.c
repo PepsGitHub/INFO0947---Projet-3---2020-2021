@@ -17,7 +17,7 @@ int main(){
   char hexa1[] = "27";
   char hexa2[] = "A23";
   char hexa3[] = "A78E";
-  char hexa4[] = "a";
+  char hexa4[] = "A";
 
   printf("%s: %u\n", hexa1, hexa_dec_rec(hexa1, 2));
   printf("%s: %u\n", hexa2, hexa_dec_rec(hexa2, 3));
