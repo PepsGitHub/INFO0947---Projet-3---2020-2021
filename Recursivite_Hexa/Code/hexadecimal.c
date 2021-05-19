@@ -33,29 +33,10 @@ static unsigned int convert(char hex){
 }//fin convert()
 
 unsigned int hexa_dec_rec(char *hexa, int n){
-  assert(hexa != (void*)0 && n >= 0);//préconditions
+  assert(hexa != (void*)0 && n >= 0);//Préconditions
 
-  static int puissance = 1, intermediaire = 0, i = 1;
-  int decimal;
-
-  if(n == 1 && i == n){
-    if(convert(hexa[n - 1]) != (unsigned int) -1)
-      return convert(hexa[n - 1]);
-    else
-      return -1;//dans le cas où l'un des char n'existe pas en hexadécimal
-  }else if(n > 0){
-    if(convert(hexa[n - 1]) != (unsigned int) -1){
-      intermediaire += convert(hexa[n - 1]) * puissance;
-      puissance *= 16;
-      i = 2;
-      return hexa_dec_rec(hexa, n - 1);//récursivité
-    }else
-      return -1;//dans le cas où l'un des char n'existe pas en hexadécimal
-  }
-
-  decimal = intermediaire;
-  puissance = 1;
-  intermediaire = 0;
-
-  return decimal;//retourne la valeur décimale finale
+  if(n == 1)
+    return convert(hexa[n - 1]);//Cas de base
+  else
+    return convert(hexa[n - 1]) + 16 * hexa_dec_rec(hexa, n - 1);//Cas récursif
 }//fin hexa_dec_rec()
