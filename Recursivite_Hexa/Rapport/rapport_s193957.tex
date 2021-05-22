@@ -301,8 +301,8 @@ hexa_dec_rec'(String hexa, int n):
     s <- hexa;
     u <- n;
     until u = 1 do
-        s = s;
-        u = u - 1;
+        s <- s;
+        u <- u - 1;
     end
     r <- convert'(hexa[u - 1]);
 \end{lstlisting}
