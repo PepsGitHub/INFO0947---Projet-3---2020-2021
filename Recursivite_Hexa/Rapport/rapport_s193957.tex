@@ -109,7 +109,7 @@ $hexa\_dec\_rec(hexa, n) = convert(hexa[n - 1])$\\
 
 \subsection{Cas récursif}
 
-Si $n > 0$ :\\
+Si $n > 1$ :\\
 
 $hexa\_dec\_rec(hexa, n) = convert(hexa[n - 1]) + 16 * hexa\_dec\_rec(hexa, n - 1)$\\
 
@@ -121,7 +121,7 @@ $hexa\_dec\_rec(hexa, n) = convert(hexa[n - 1]) + 16 * hexa\_dec\_rec(hexa, n - 
 %
 
 \begin{lstlisting}
-//PréConditions : hexa != NULL, n >= 0
+//PréConditions : hexa != NULL, n > 0
 //PostConditions : hexa\_dec\_rec = decimal $\wedge$ hexa = hexa$_0$ $\wedge$ n = n$_0$
 unsigned int hexa_dec_rec(char *hexa, int n);
 \end{lstlisting}
@@ -138,8 +138,8 @@ On vérifie que la précondition est respectée en interdisant à hexa d'être N
 
 \begin{lstlisting}
 unsigned int hexa_dec_rec(char *hexa, int n){
-    assert(hexa != (void*)0 && n >= 0);
-    // \{PréConditions $\equiv$ $hexa \neq$ NULL $\wedge (length(hexa) \geq 0 \implies n \geq 0$)\}
+    assert(hexa != (void*)0 && n > 0);
+    // \{PréConditions $\equiv$ $hexa \neq$ NULL $\wedge$  $(longueur(hexa) > 0 \implies n > 0$)\}
 }
 \end{lstlisting}
 
@@ -149,7 +149,7 @@ unsigned int hexa_dec_rec(char *hexa, int n){
 On gère le cas de base où $n = 1$ après s'être assuré que les préconditions sont bien respectées.
 
 \begin{lstlisting}
-// \{PréConditions $\equiv$ $hexa \neq$ NULL $\wedge (length(hexa) \geq 0 \implies n \geq 0$)\}
+// \{PréConditions $\equiv$ $hexa \neq$ NULL $\wedge$  $(longueur(hexa) > 0 \implies n > 0$)\}
 if(n == 1)
     // \{hexa $\neq$ NULL $\wedge$ n = 1\}
     return convert(hexa[n - 1]);
@@ -158,13 +158,13 @@ if(n == 1)
 }
 \end{lstlisting}
 
-\subsection{Cas Récursifs}
-Il y a un seul cas récursif, lorsque n $\neq$ 1.
+\subsection{Cas Récursif}
+Il y a un seul cas récursif, lorsque n > 1.
 \{PréConditions$_{REC}$\} et \{PostConditions$_{REC}$\} sont respectivement les PréConditions et les PostConditions de l'appel récursif.
 
 \begin{lstlisting}
 else
-    // \{hexa $\neq$ NULL $\wedge$ n $\neq$ 1\}
+    // \{hexa $\neq$ NULL $\wedge$ n > 1\}
     // \{$\implies$ PréConditions$_{REC}$\}
     return convert(hexa[n - 1]) + 16 * hexa_dec_rec(hexa, n - 1);
     // \{PostConditions$_{REC}$ $\equiv$ 
@@ -177,7 +177,7 @@ else
 
 \begin{lstlisting}
 unsigned int hexa_dec_rec(char *hexa, int n){
-  assert(hexa != (void*)0 && n >= 0);//Préconditions
+  assert(hexa != (void*)0 && n > 0);//Préconditions
 
   if(n == 1)
     return convert(hexa[n - 1]);//Cas de base
@@ -185,7 +185,7 @@ unsigned int hexa_dec_rec(char *hexa, int n){
     return convert(hexa[n - 1]) + 16 * hexa_dec_rec(hexa, n - 1);//Cas récursif
 }
 \end{lstlisting}
-
+\newpage
 \section{Traces d'Exécution}\label{traces}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
@@ -196,55 +196,54 @@ unsigned int hexa_dec_rec(char *hexa, int n){
 % L'exemple ci-dessous donne une trace d'exécution pour un exercice sur les
 % Piles (cfr. GameCodes associés).  Inspirez-vous du code LaTeX pour produire
 % vos traces d'exécution.
-% \begin{tabular}{|c|}
-% \\
-% \\
-% \textcolor{white}{--}\\
-% \hline
-% \end{tabular}~~
-% \begin{tabular}{|c|}
-% \\
-% \\
-% 20\\
-% \hline
-% \end{tabular}~~
-% \begin{tabular}{|c|}
-% \\
-% 4\\
-% 20\\
-% \hline
-% \end{tabular}~~
-% \begin{tabular}{|c|}
-% \\
-% \\
-% 80\\
-% \hline
-% \end{tabular}~~
-% \begin{tabular}{|c|}
-% \\
-% 9\\
-% 80\\
-% \hline
-% \end{tabular}~~
-% \begin{tabular}{|c|}
-% 7\\
-% 9\\
-% 80\\
-% \hline
-% \end{tabular}~~
-% \begin{tabular}{|c|}
-% \\
-% 16\\
-% 80\\
-% \hline
-% \end{tabular}~~
-% \begin{tabular}{|c|}
-% \\
-% \\
-% 5\\
-% \hline
-% \end{tabular}
 
+Voici les traces d'exécution concernant les 3 exemples du fichier main-hexadécimal.c
+
+\subsection{hexa\_dec\_rec("27", 2)}
+
+ \begin{tabular}{|c|}
+ \\
+ \\
+ hexa\_dec\_rec("27", 2)\\
+ \hline
+ \end{tabular}~~
+ \begin{tabular}{|c|}
+ \\
+ \\
+ 7 + 16 * 2 = 39\\
+ \hline
+ \end{tabular}~~
+ 
+\subsection{hexa\_dec\_rec("A23", 3)}
+
+ \begin{tabular}{|c|}
+ \\
+ \\
+ hexa\_dec\_rec("A23", 3)\\
+ \hline
+ \end{tabular}~~
+ \begin{tabular}{|c|}
+ \\
+ \\
+ 3 + 16 * (2 + 16 * 10) = 2595\\
+ \hline
+ \end{tabular}~~
+ 
+\subsection{hexa\_dec\_rec("A78E", 4)}
+
+ \begin{tabular}{|c|}
+ \\
+ \\
+ hexa\_dec\_rec("A78E", 4)\\
+ \hline
+ \end{tabular}~~
+ \begin{tabular}{|c|}
+ \\
+ \\
+ 14 + 16 * (8 + 16 * (7 + 16 * (10))) = 42894\\
+ \hline
+ \end{tabular}~~
+ 
 \section{Complexité}\label{complexite}
 %%%%%%%%%%%%%%%%%%%%%
 %
@@ -252,6 +251,27 @@ unsigned int hexa_dec_rec(char *hexa, int n){
 %  hexa_dec_rec()
 %
 
+Avec $b \in$ $[0, 15]$, $n \in \mathbb{N}$, on a :\\
+
+$T(n) = 16 * T(n-1) + b$
+
+\subsection{Cas de base}
+
+Dans le cas où $n = 1$ :\\
+
+$T(n)$ est linéaire car $T(1) = b$ et $b \in [0, 15]$
+
+\subsection{Cas récursif}
+
+Dans le cas où $n > 1$ :\\
+
+La fonction hexa\_dec\_rec(hexa, n) va s'appeler récursivement en décrémentant la valeur courante de n à chaque appel jusqu'à atteindre le cas de base.
+On a donc n - 1 appels récursifs.\\
+
+$T(n) = 16 * T(n-1) + b$ $\rightarrow$ $O(n)$\\
+
+La complexité de la fonction hexa\_dec\_rec(hexa, n) est \textbf{linéaire}.
+\newpage
 \section{Dérécursification}\label{derecur}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
@@ -261,5 +281,32 @@ unsigned int hexa_dec_rec(char *hexa, int n){
 % La solution doit être proposée en utilisant le pseudo-code vu au cours (et
 % dans les GameCodes du Chapitre 9).
 %
+Pour procéder à la dérécursification, on va utiliser le pseudo langage qu'on a vu dans les gamecodes associés.
+
+\subsection{Code récursif}
+
+\begin{lstlisting}
+hexa_dec_rec(String hexa, int n):
+    if(n = 1)
+        then
+            r <- convert(hexa[n - 1]);
+        else
+            r <- convert(hexa[n - 1]) + 16 * hexa_dec_rec(hexa, n - 1);
+\end{lstlisting}
+
+\subsection{Code dérécursivé}
+
+\begin{lstlisting}
+hexa_dec_rec'(String hexa, int n):
+    s <- hexa;
+    u <- n;
+    until u = 1 do
+        s = s;
+        u = u - 1;
+    end
+    r <- convert'(hexa[u - 1]);
+\end{lstlisting}
+
+
 
 \end{document}

@@ -33,7 +33,7 @@ static unsigned int convert(char hex){
 }//fin convert()
 
 unsigned int hexa_dec_rec(char *hexa, int n){
-  assert(hexa != (void*)0 && n >= 0);//Préconditions
+  assert(hexa != (void*)0 && n > 0);//Préconditions
 
   if(n == 1)
     return convert(hexa[n - 1]);//Cas de base
