@@ -134,7 +134,7 @@ unsigned int hexa_dec_rec(char *hexa, int n);
 %
 
 \subsection{Programmation Défensive}
-On vérifie que la précondition est respectée en interdisant à hexa d'être NULL et n ne peut pas être strictement négatif
+On vérifie que la précondition est respectée en interdisant à hexa d'être NULL et n ne peut être négatif
 
 \begin{lstlisting}
 unsigned int hexa_dec_rec(char *hexa, int n){
@@ -159,7 +159,7 @@ if(n == 1)
 \end{lstlisting}
 
 \subsection{Cas Récursif}
-Il y a un seul cas récursif, lorsque n > 1.
+Il y a un seul cas récursif, lorsque n est strictement supérieur à 1.
 \{PréConditions$_{REC}$\} et \{PostConditions$_{REC}$\} sont respectivement les PréConditions et les PostConditions de l'appel récursif.
 
 \begin{lstlisting}
@@ -285,28 +285,32 @@ Pour procéder à la dérécursification, on va utiliser le pseudo langage qu'on
 
 \subsection{Code récursif}
 
-\begin{lstlisting}
+\lstset{escapeinside=//}
+\begin{lstlisting}[language=Algol]
 hexa_dec_rec(String hexa, int n):
-    if(n = 1)
-        then
-            r <- convert(hexa[n - 1]);
-        else
-            r <- convert(hexa[n - 1]) + 16 * hexa_dec_rec(hexa, n - 1);
+  if(n=1)
+    then 
+      r /$\leftarrow$/ convert(hexa[n - 1]);
+    else
+      r /$\leftarrow$/ convert(hexa[n - 1]) + 16 * hexa_dec_rec(hexa, n - 1);
 \end{lstlisting}
 
 \subsection{Code dérécursivé}
 
-\begin{lstlisting}
+\lstdefinelanguage{Custom}{%
+language = Algol,
+morekeywords = {until},
+escapeinside = //,
+}
+\begin{lstlisting}[language=Custom]
 hexa_dec_rec'(String hexa, int n):
-    s <- hexa;
-    u <- n;
+    s /$\leftarrow$/ hexa;
+    u /$\leftarrow$/ n;
     until u = 1 do
-        s <- s;
-        u <- u - 1;
+        s /$\leftarrow$/ s;
+        u /$\leftarrow$/ u - 1;
     end
-    r <- convert'(hexa[u - 1]);
+    r /$\leftarrow$/ convert'(hexa[u - 1]);
 \end{lstlisting}
-
-
 
 \end{document}
