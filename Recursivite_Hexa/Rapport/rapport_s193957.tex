@@ -95,6 +95,16 @@
 %%%%%%%%%%%%%%%% RAPPORT %%%%%%%%%%%%%%%
 % Complétez les sections ci-dessous
 
+\section{Notations}
+
+Avant de commencer à parler de la formulation récursive, introduisons d'abord les notations utilisées par la suite:\\
+
+\begin{itemize}
+    \item $hexa$ $\equiv$ chaîne de charactères représentant un nombre hexadécimal
+    \item $n$ $\equiv$ taille de la chaîne de charactères $hexa$
+    \item $hexa\_dec\_rec$ $\equiv$ résultat de la conversion d'un nombre hexadécimal en sa traduction décimale.
+\end{itemize}
+
 \section{Formulation Récursive}\label{formulation}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
@@ -103,15 +113,31 @@
 
 \subsection{Cas de base}
 
+Une chaîne de caractères vide ne pouvant pas  être convertie, le premier cas à considérer est le cas où l'on a un seul charactère à savoir $n = 1$. Afin d'obtenir le nombre décimal à partir de son homologue en hexa, il suffit juste d'utiliser la fonction convert(). Fonction permettant de convertir un nombre hexadécimal en un nombre décimal correspondant.\\
+
 Si $n = 1$ :\\
 
 $hexa\_dec\_rec(hexa, n) = convert(hexa[n - 1])$\\
 
 \subsection{Cas récursif}
 
+Pour procéder de manière récursive, on prend tous les cas possibles dans l'ordre croissant à partir du cas de base + 1. Autrement dit lorsque n est strictement supérieur à 1.\\
+
 Si $n > 1$ :\\
 
 $hexa\_dec\_rec(hexa, n) = convert(hexa[n - 1]) + 16 * hexa\_dec\_rec(hexa, n - 1)$\\
+
+\subsection{Synthèse}
+En faisant la synthèse du cas de base et du cas récursif, on obtient la formulation récursive de $hexa\_dec\_rec$:
+
+
+$hexa\_dec\_rec(hexa, n)$ = $\left\{
+    \begin{array}{ll}
+        convert(hexa[n-1]) & \mbox{si n = 1}\\
+        convert(hexa[n-1]) + 16 \times hexa\_dec\_rec(hexa, n-1) & \mbox{sinon}
+    \end{array}
+\right.$
+
 
 \section{Spécification}\label{specification}
 %%%%%%%%%%%%%%%%%%%%%%%%%
@@ -119,10 +145,26 @@ $hexa\_dec\_rec(hexa, n) = convert(hexa[n - 1]) + 16 * hexa\_dec\_rec(hexa, n - 
 % Fournissez et discutez ici la spécification formelle de la fonction
 % hexa_dec_rec()
 %
+L'énoncé nous dit que la fonction \texttt{hexa\_dec\_rec} est de type \texttt{unsigned int} et prend comme paramètres \texttt{hexa} et \texttt{n} avec \texttt{hexa} une chaîne de charactères (\texttt{char*}) et \texttt{n} sa taille (\texttt{int})
+
+\subsection{PréCondition}
+
+Comme vu précédemment dans le cas de base, $n$ ne peut être nul. Sachant que $n$ est un entier, il paraît naturel de dire que $n$ doit être strictement supérieur à 0.
+De plus, on ne peut pas convertir une chaîne de charactères qui n'existe pas. De ce fait, on exprime $hexa$ $!=$ NULL. Ce qui nous donne la préCondition suivante:\\
+
+PréCondition $\equiv$ $hexa$ $!=$ NULL $\wedge$ $n > 0$
+
+\subsection{PostCondition}
+En postCondition, nous voulons que $hexa$ et $n$ ne soient pas modifiés et que $hexa\_dec\_rec$ soit égal à la notation introduite précédemment à savoir $hexa\_dec\_rec(hexa, n)$
+Celà se traduit par la postCondition suivante:\\
+
+PostCondition $\equiv$ $hexa\_dec\_rec = hexa\_dec\_rec(hexa, n)$ $\wedge$ $hexa = hexa_0$ $\wedge$ $n = n_0$
+
+\subsection{Résumé}
 
 \begin{lstlisting}
-//PréConditions : hexa != NULL, n > 0
-//PostConditions : hexa\_dec\_rec = decimal $\wedge$ hexa = hexa$_0$ $\wedge$ n = n$_0$
+//PréCondition : hexa != NULL, n > 0
+//PostCondition : hexa\_dec\_rec = hexa\_dec\_rec(hexa, n) $\wedge$ hexa = hexa$_0$ $\wedge$ n = n$_0$
 unsigned int hexa_dec_rec(char *hexa, int n);
 \end{lstlisting}
 
@@ -139,45 +181,44 @@ On vérifie que la précondition est respectée en interdisant à hexa d'être N
 \begin{lstlisting}
 unsigned int hexa_dec_rec(char *hexa, int n){
     assert(hexa != (void*)0 && n > 0);
-    // \{PréConditions $\equiv$ $hexa \neq$ NULL $\wedge$  $(longueur(hexa) > 0 \implies n > 0$)\}
+    // \{PréCondition $\equiv$ $hexa \neq$ NULL $\wedge$ $n > 0$)\}
 }
 \end{lstlisting}
 
 \newpage
 
 \subsection{Cas de Base}
-On gère le cas de base où $n = 1$ après s'être assuré que les préconditions sont bien respectées.
+On gère le cas de base où $n = 1$ après s'être assuré que la préCondition est bien respectée.
 
 \begin{lstlisting}
-// \{PréConditions $\equiv$ $hexa \neq$ NULL $\wedge$  $(longueur(hexa) > 0 \implies n > 0$)\}
+// \{PréCondition $\equiv$ $hexa \neq$ NULL $\wedge$  $n > 0$)\}
 if(n == 1)
-    // \{hexa $\neq$ NULL $\wedge$ n = 1\}
+    // \{n = 1 $\wedge$ hexa = hexa$_0$ $\wedge$ n = n$_0$\}
     return convert(hexa[n - 1]);
-    // \{hexa\_dec\_rec = convert(hexa[n - 1]) $\wedge$ hexa = hexa$_0$ $\wedge$ n = n$_0$\}
+    // \{hexa\_dec\_rec(hexa, n) = convert(hexa[n - 1]) $\wedge$ hexa = hexa$_0$ $\wedge$ n = n$_0$\}
     // \{$\implies$ PostCondition\}
 }
 \end{lstlisting}
 
 \subsection{Cas Récursif}
 Il y a un seul cas récursif, lorsque n est strictement supérieur à 1.
-\{PréConditions$_{REC}$\} et \{PostConditions$_{REC}$\} sont respectivement les PréConditions et les PostConditions de l'appel récursif.
+\{PréCondition$_{REC}$\} et \{PostCondition$_{REC}$\} sont respectivement la PréCondition et la PostCondition de l'appel récursif.
 
 \begin{lstlisting}
 else
-    // \{hexa $\neq$ NULL $\wedge$ n > 1\}
-    // \{$\implies$ PréConditions$_{REC}$\}
+    // \{hexa $\neq$ NULL $\implies$ hexa$_{REC}$ $\neq$ NULL $\wedge$ n > 1\}
+    // \{$\implies$ PréCondition$_{REC}$\}
     return convert(hexa[n - 1]) + 16 * hexa_dec_rec(hexa, n - 1);
-    // \{PostConditions$_{REC}$ $\equiv$ 
-    // hexa\_dec\_rec(hexa, n) = convert(hexa[n - 1]) + 16 * hexa\_dec\_rec(hexa, n-1)
-    // $\wedge$ n = n - 1 $\wedge$ hexa = hexa$_0$\}
-    // \{$\implies$ PostConditions\}
+    // \{PostCondition$_{REC}$ $\equiv$ hexa\_dec\_rec = hexa\_dec\_rec(hexa, n) $\wedge$ n = n$_0$ $\wedge$ hexa = hexa$_0$\}
+    // \{hexa\_dec\_rec = hexa\_dec\_rec(hexa, n) $\wedge$ n = n$_0$ $\wedge$ hexa = hexa$_0$\}
+    // \{$\implies$ PostCondition\}
 \end{lstlisting}
 
 \subsection{Code complet}
 
 \begin{lstlisting}
 unsigned int hexa_dec_rec(char *hexa, int n){
-  assert(hexa != (void*)0 && n > 0);//Préconditions
+  assert(hexa != (void*)0 && n > 0);//Précondition
 
   if(n == 1)
     return convert(hexa[n - 1]);//Cas de base
@@ -251,27 +292,37 @@ Voici les traces d'exécution concernant les 3 exemples du fichier main-hexadéc
 %  hexa_dec_rec()
 %
 
-Avec $b \in$ $[0, 15]$, $n \in \mathbb{N}$, on a :\\
+On prendra la découpe suivante :
+\begin{center}
+  \includegraphics[width=15.9cm]{découpage_complexite.png}
+\end{center}
 
-$T(n) = 16 * T(n-1) + b$
+\begin{itemize}
+    \item Dans le cas où $n = 1$ :\\
+    
+    $T(n)$ est constant car $T(1) = a$\\
+    \item Dans le cas où $n > 1$ :\\
 
-\subsection{Cas de base}
+    La fonction hexa\_dec\_rec(hexa, n) va s'appeler récursivement en décrémentant la valeur courante de n à chaque appel jusqu'à atteindre le cas de base.
+    On a donc n - 1 appels récursifs.\\
+    
+    $T(n)$ est linéaire car $T(n) = T(n-1) * b$\\
+\end{itemize}
 
-Dans le cas où $n = 1$ :\\
+En résumé, on a :
 
-$T(n)$ est linéaire car $T(1) = b$ et $b \in [0, 15]$
+\begin{eqnarray*}
+  T(n)=
+  \begin{cases}
+    a &\text{si n = 1} \\
+    \text{T(n-1) * b} &\text{sinon}\\
+  \end{cases}
+\end{eqnarray*}
 
-\subsection{Cas récursif}
-
-Dans le cas où $n > 1$ :\\
-
-La fonction hexa\_dec\_rec(hexa, n) va s'appeler récursivement en décrémentant la valeur courante de n à chaque appel jusqu'à atteindre le cas de base.
-On a donc n - 1 appels récursifs.\\
-
-$T(n) = 16 * T(n-1) + b$ $\rightarrow$ $O(n)$\\
+$T(n) = T(n-1) * b$ $\rightarrow$ $O(n)$\\
 
 La complexité de la fonction hexa\_dec\_rec(hexa, n) est \textbf{linéaire}.
-\newpage
+
 \section{Dérécursification}\label{derecur}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %

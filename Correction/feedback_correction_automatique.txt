@@ -1,0 +1,18 @@
+MAKEFILE PRESENT
+
+Compilation...
+
+Exécution des tests automatiques...
+Test 1 (A -- 10): 
+	10 ==> CORRECT
+Test 2 (27 -- 39): 
+	39 ==> CORRECT
+Test 3 (A23 -- 2595): 
+	2595 ==> CORRECT
+Test 4 (A78E -- 42894): 
+	42894 ==> CORRECT
+Test 5 (FFFFFFFF -- 4294967295): 
+	4294967295 ==> CORRECT
+
+Programmation Défensive
+  assert(hexa != (void*)0 && n > 0);//Préconditions
